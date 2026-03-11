@@ -1,8 +1,10 @@
-import re
+"""Validation helpers for form submissions."""
+
 from email_validator import validate_email, EmailNotValidError
 
 
 def is_valid_email(email: str) -> bool:
+    """Return True when the email passes validation."""
     try:
         validate_email(email)
         return True
@@ -10,11 +12,7 @@ def is_valid_email(email: str) -> bool:
         return False
 
 
-def is_valid_phone(phone: str) -> bool:
-    """Accepts exactly 10 digits (extend the pattern as needed)."""
-    return bool(re.match(r'^[0-9]{10}$', phone))
-
-
 def is_spam(data: dict) -> bool:
-    """Honeypot check — bots fill hidden 'company' field."""
+    """Return True when the honeypot field was filled."""
     return bool(data.get("company"))
+

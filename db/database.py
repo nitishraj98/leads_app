@@ -1,12 +1,16 @@
+"""Database access helpers for lead submissions."""
+
 import psycopg2
 from config.settings import DB_CONFIG
 
 
 def get_connection():
+    """Create a database connection using configured settings."""
     return psycopg2.connect(**DB_CONFIG)
 
 
 def init_db():
+    """Create or upgrade the form submissions table."""
     conn = get_connection()
     cur  = conn.cursor()
 
@@ -20,15 +24,16 @@ def init_db():
             website_key  VARCHAR(255),
             product      VARCHAR(255),
             product_type VARCHAR(255),
+            ip_address   VARCHAR(45),
             submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
 
-    # Idempotent column additions (safe on existing tables)
     for col, dtype in [
         ("website_key",  "VARCHAR(255)"),
         ("product",      "VARCHAR(255)"),
         ("product_type", "VARCHAR(255)"),
+        ("ip_address",   "VARCHAR(45)"),
     ]:
         cur.execute(f"""
             DO $$ BEGIN
@@ -44,31 +49,33 @@ def init_db():
     conn.commit()
     cur.close()
     conn.close()
-    print("✅ PostgreSQL table ready.")
+    print("PostgreSQL table ready.")
 
 
-def save_lead(name, email, phone, message, website_key, product, product_type):
+def save_lead(name, email, phone, message, website_key, product, product_type, ip_address):
+    """Persist a lead submission."""
     conn = get_connection()
     cur  = conn.cursor()
     cur.execute(
         """INSERT INTO form_submissions
-           (name, email, phone, message, website_key, product, product_type)
-           VALUES (%s, %s, %s, %s, %s, %s, %s)""",
-        (name, email, phone, message, website_key, product, product_type),
+           (name, email, phone, message, website_key, product, product_type, ip_address)
+           VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
+        (name, email, phone, message, website_key, product, product_type, ip_address),
     )
     conn.commit()
     cur.close()
     conn.close()
-    print(f"✅ Saved: {name} <{email}>")
+    print(f"Saved: {name} <{email}>")
 
 
 def fetch_leads(website_key=None, limit=50, offset=0):
+    """Fetch paginated lead submissions."""
     conn = get_connection()
     cur  = conn.cursor()
 
     query  = """
         SELECT id, name, email, phone, message,
-               website_key, product, product_type, submitted_at
+               website_key, product, product_type, ip_address, submitted_at
         FROM form_submissions
     """
     params = []
@@ -104,9 +111,12 @@ def fetch_leads(website_key=None, limit=50, offset=0):
             "website_key":  row[5],
             "product":      row[6],
             "product_type": row[7],
-            "submitted_at": row[8].isoformat() if row[8] else None,
+            "ip_address":   row[8],
+            "submitted_at": row[9].isoformat() if row[9] else None,
         }
         for row in rows
     ]
 
     return leads, total
+
+

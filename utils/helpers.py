@@ -1,3 +1,5 @@
+"""Small formatting helpers for emails and labels."""
+
 def https(url: str) -> str:
     """Ensure a URL has an https:// scheme."""
     if url and not url.startswith(("http://", "https://")):
@@ -13,5 +15,6 @@ def label(url: str) -> str:
 
 
 def dash(value: str) -> str:
-    """Return the value or an em-dash if empty/None."""
-    return value if value else "—"
+    """Return the value or a dash if empty/None."""
+    return value if value else "-"
+

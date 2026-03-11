@@ -10,29 +10,29 @@ your team.
 
 ```
 leads_app/
-├── app.py                  # App factory & entry point
-├── requirements.txt
-├── .env.example
-│
-├── config/
-│   └── settings.py         # All env vars & constants
-│
-├── db/
-│   └── database.py         # DB connection, init, save & fetch
-│
-├── email/
-│   ├── sender.py           # SMTP dispatch logic
-│   ├── user_template.py    # User confirmation HTML email
-│   └── admin_template.py   # Admin notification HTML email
-│
-├── routes/
-│   ├── index.py            # GET  /         (contact form UI)
-│   ├── submit.py           # POST /submit   (form handler)
-│   └── leads.py            # GET  /leads    (API key protected)
-│
-└── utils/
-    ├── validators.py       # Email, phone & spam validation
-    └── helpers.py          # https(), label(), dash() helpers
+ app.py                  # App factory & entry point
+ requirements.txt
+ .env.example
+
+ config/
+    settings.py         # All env vars & constants
+
+ db/
+    database.py         # DB connection, init, save & fetch
+
+ email/
+    sender.py           # SMTP dispatch logic
+    user_template.py    # User confirmation HTML email
+    admin_template.py   # Admin notification HTML email
+
+ routes/
+    index.py            # GET  /         (contact form UI)
+    submit.py           # POST /submit   (form handler)
+    leads.py            # GET  /leads    (API key protected)
+
+ utils/
+     validators.py       # Email, phone & spam validation
+     helpers.py          # https(), label(), dash() helpers
 ```
 
 ---
@@ -98,14 +98,14 @@ Submit a new lead.
 
 | Field          | Type   | Required | Description                        |
 |----------------|--------|----------|------------------------------------|
-| `name`         | string | ✅       | Full name                          |
-| `email`        | string | ✅       | Valid email address                |
+| `name`         | string |        | Full name                          |
+| `email`        | string |        | Valid email address                |
 | `phone`        | string |          | 10-digit phone number              |
 | `message`      | string |          | Max 1 000 characters               |
 | `website_key`  | string |          | Source website URL                 |
 | `product`      | string |          | Product name                       |
 | `product_type` | string |          | Product category                   |
-| `company`      | string |          | **Honeypot** — must be left empty  |
+| `company`      | string |          | **Honeypot**  must be left empty  |
 
 **Success response:**
 ```json
@@ -129,7 +129,7 @@ Fetch paginated leads.
 
 | Param         | Default | Description                      |
 |---------------|---------|----------------------------------|
-| `website_key` | —       | Filter by source website         |
+| `website_key` |        | Filter by source website         |
 | `limit`       | 50      | Number of results to return      |
 | `offset`      | 0       | Pagination offset                |
 
@@ -144,7 +144,7 @@ curl -H "X-API-Key: your-api-key" \
 ## Gmail Setup (App Password)
 
 1. Enable 2-Step Verification on your Google account.
-2. Go to **Google Account → Security → App Passwords**.
+2. Go to **Google Account  Security  App Passwords**.
 3. Generate a password for "Mail" and paste it as `SENDER_PASSWORD` in `.env`.
 
 ---
@@ -157,3 +157,4 @@ curl -H "X-API-Key: your-api-key" \
   gunicorn -w 4 -b 0.0.0.0:5000 "app:create_app()"
   ```
 - Store `.env` secrets securely (e.g. via your host's environment variable manager).
+

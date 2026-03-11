@@ -1,3 +1,5 @@
+"""Lead listing endpoint for admins."""
+
 from flask import Blueprint, request, jsonify
 
 from config.settings import API_KEY
@@ -8,6 +10,7 @@ leads_bp = Blueprint("leads", __name__)
 
 @leads_bp.route("/leads", methods=["GET"])
 def get_leads():
+    """Return paginated leads for authorized requests."""
     if request.headers.get("X-API-Key") != API_KEY:
         return jsonify({"success": False, "message": "Unauthorized"}), 401
 

@@ -1,8 +1,11 @@
+"""User confirmation email template."""
+
 from datetime import datetime
 from utils.helpers import https, label
 
 
 def build(name: str, website_key: str) -> str:
+    """Render the user confirmation HTML email."""
     url  = https(website_key)
     lbl  = label(website_key)
     year = datetime.now().year
@@ -21,7 +24,7 @@ def build(name: str, website_key: str) -> str:
 </head>
 <body style="margin:0;padding:0;background-color:#fef3f2;">
 
-  <!-- Hidden preview text -->
+  
   <div style="display:none;max-height:0;overflow:hidden;mso-hide:all;">
     Thank you for reaching out! We'll respond within 24 hours.
   </div>
@@ -33,43 +36,43 @@ def build(name: str, website_key: str) -> str:
       <table role="presentation" width="600" cellpadding="0" cellspacing="0"
              style="max-width:600px;width:100%;">
 
-        <!-- Card -->
+        
         <tr><td>
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
                  style="background-color:#ffffff;border-radius:8px;overflow:hidden;
                         box-shadow:0 4px 6px rgba(0,0,0,0.07);">
 
-            <!-- Top accent -->
+            
             <tr><td style="height:5px;background-color:#f97316;"></td></tr>
 
-            <!-- Heading -->
+            
             <tr><td align="center" style="padding:40px 40px 10px;">
               <h1 style="margin:0;font-family:Arial,sans-serif;font-size:26px;
                           font-weight:bold;color:#1f2937;">Message Received!</h1>
             </td></tr>
 
-            <!-- Sub-heading -->
+            
             <tr><td align="center" style="padding:0 40px 30px;">
               <p style="margin:0;font-family:Arial,sans-serif;font-size:16px;color:#6b7280;">
                 Thank you for getting in touch with us
               </p>
             </td></tr>
 
-            <!-- Divider -->
+            
             <tr><td style="padding:0 40px;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr><td style="height:1px;background-color:#e5e7eb;"></td></tr>
               </table>
             </td></tr>
 
-            <!-- Greeting -->
+            
             <tr><td style="padding:30px 40px 20px;">
               <p style="margin:0;font-family:Arial,sans-serif;font-size:16px;color:#374151;">
                 Hello <strong style="color:#1f2937;">{name}</strong>,
               </p>
             </td></tr>
 
-            <!-- Body -->
+            
             <tr><td style="padding:0 40px 20px;">
               <p style="margin:0;font-family:Arial,sans-serif;font-size:15px;
                         color:#4b5563;line-height:1.8;">
@@ -78,7 +81,7 @@ def build(name: str, website_key: str) -> str:
               </p>
             </td></tr>
 
-            <!-- Info box -->
+            
             <tr><td style="padding:0 40px 25px;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
                      style="background-color:#fff7ed;border-left:4px solid #f97316;
@@ -86,7 +89,7 @@ def build(name: str, website_key: str) -> str:
                 <tr><td style="padding:20px;">
                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                     <tr>
-                      <td width="50" valign="top"><span style="font-size:24px;">⏱️</span></td>
+                      <td width="50" valign="top"></td>
                       <td valign="top">
                         <p style="margin:0 0 5px;font-family:Arial,sans-serif;font-size:14px;
                                   font-weight:bold;color:#1f2937;">Expected Response Time</p>
@@ -102,7 +105,7 @@ def build(name: str, website_key: str) -> str:
               </table>
             </td></tr>
 
-            <!-- Extra note -->
+            
             <tr><td style="padding:0 40px 30px;">
               <p style="margin:0;font-family:Arial,sans-serif;font-size:15px;
                         color:#4b5563;line-height:1.8;">
@@ -111,7 +114,7 @@ def build(name: str, website_key: str) -> str:
               </p>
             </td></tr>
 
-            <!-- CTA -->
+            
             <tr><td align="center" style="padding:10px 40px 40px;">
               <table role="presentation" cellpadding="0" cellspacing="0">
                 <tr><td align="center"
@@ -121,7 +124,7 @@ def build(name: str, website_key: str) -> str:
                             font-family:Arial,sans-serif;font-size:16px;
                             font-weight:bold;color:#ffffff;text-decoration:none;
                             border-radius:6px;">
-                    Visit Our Website →
+                    Visit Our Website
                   </a>
                 </td></tr>
               </table>
@@ -130,27 +133,27 @@ def build(name: str, website_key: str) -> str:
           </table>
         </td></tr>
 
-        <!-- "While you wait" block -->
+        
         <tr><td style="padding:25px 0;">
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
                  style="background-color:#ffffff;border-radius:8px;">
             <tr><td style="padding:25px 30px;">
               <p style="margin:0 0 15px;font-family:Arial,sans-serif;font-size:14px;
-                        font-weight:bold;color:#1f2937;">💡 While you wait, you can:</p>
+                        font-weight:bold;color:#1f2937;"> While you wait, you can:</p>
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr><td style="padding:8px 0;">
                   <span style="font-family:Arial,sans-serif;font-size:14px;color:#4b5563;">
-                    ✦ &nbsp; Explore our services and offerings
+                    - Explore our services and offerings
                   </span>
                 </td></tr>
                 <tr><td style="padding:8px 0;">
                   <span style="font-family:Arial,sans-serif;font-size:14px;color:#4b5563;">
-                    ✦ &nbsp; Check out our latest updates
+                    - Check out our latest updates
                   </span>
                 </td></tr>
                 <tr><td style="padding:8px 0;">
                   <span style="font-family:Arial,sans-serif;font-size:14px;color:#4b5563;">
-                    ✦ &nbsp; Browse our FAQ section
+                    - Browse our FAQ section
                   </span>
                 </td></tr>
               </table>
@@ -158,7 +161,7 @@ def build(name: str, website_key: str) -> str:
           </table>
         </td></tr>
 
-        <!-- Footer -->
+        
         <tr><td style="padding:20px 0;">
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
             <tr><td align="center" style="padding:0 20px 20px;">
@@ -177,7 +180,7 @@ def build(name: str, website_key: str) -> str:
             </td></tr>
             <tr><td align="center" style="padding:10px 20px;">
               <p style="margin:0;font-family:Arial,sans-serif;font-size:12px;color:#9ca3af;">
-                © {year} {lbl}. All rights reserved.
+                (c) {year} {lbl}. All rights reserved.
               </p>
             </td></tr>
             <tr><td align="center" style="padding:15px 20px 0;">
@@ -194,3 +197,4 @@ def build(name: str, website_key: str) -> str:
 </body>
 </html>
 """
+

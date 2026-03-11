@@ -1,12 +1,16 @@
+"""Admin email template for new lead notifications."""
+
 from datetime import datetime
 from utils.helpers import https, label, dash
 
 
 def build(name: str, email: str, phone: str, message: str,
-          website_key: str, product: str, product_type: str) -> str:
+          website_key: str, product: str, product_type: str,
+          ip_address: str) -> str:
+    """Render the admin notification HTML email."""
     url  = https(website_key)
     lbl  = label(website_key)
-    ts   = datetime.now().strftime("%B %d, %Y  ·  %I:%M %p")
+    ts   = datetime.now().strftime("%B %d, %Y - %I:%M %p")
     year = datetime.now().year
 
     return f"""<!DOCTYPE html>
@@ -25,23 +29,23 @@ def build(name: str, email: str, phone: str, message: str,
 
   <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
 
-    <!-- Brand bar -->
+    
     <tr>
       <td align="center" style="padding-bottom:24px;">
         <span style="display:inline-block;background-color:#dde3ed;border-radius:100px;
                      padding:6px 20px;color:#64748b;font-size:12px;font-weight:600;
                      letter-spacing:2px;text-transform:uppercase;">
-          {lbl} &nbsp;·&nbsp; Admin Panel
+          {lbl} &nbsp;&nbsp; Admin Panel
         </span>
       </td>
     </tr>
 
-    <!-- MAIN CARD -->
+    
     <tr>
       <td style="background-color:#ffffff;border-radius:16px;overflow:hidden;
                  border:1px solid #e2e8f0;">
 
-        <!-- Top accent bar -->
+        
         <table width="100%" cellpadding="0" cellspacing="0">
           <tr>
             <td style="height:4px;background-color:#6366f1;"></td>
@@ -50,7 +54,7 @@ def build(name: str, email: str, phone: str, message: str,
           </tr>
         </table>
 
-        <!-- HEADER -->
+        
         <table width="100%" cellpadding="0" cellspacing="0">
           <tr>
             <td style="background-color:#1e1b4b;padding:36px 44px 30px;">
@@ -62,7 +66,7 @@ def build(name: str, email: str, phone: str, message: str,
                         <td style="background-color:#312e81;border-radius:100px;padding:5px 14px;">
                           <span style="color:#a5b4fc;font-size:11px;font-weight:700;
                                        letter-spacing:1.5px;text-transform:uppercase;">
-                            ● New Lead
+                             New Lead
                           </span>
                         </td>
                       </tr>
@@ -75,12 +79,12 @@ def build(name: str, email: str, phone: str, message: str,
                   <td width="64" style="vertical-align:middle;text-align:right;">
                     <div style="width:58px;height:58px;background-color:#4f46e5;
                                 border-radius:14px;text-align:center;line-height:58px;
-                                font-size:24px;">📬</div>
+                                font-size:24px;"></div>
                   </td>
                 </tr>
               </table>
 
-              <!-- Source bar -->
+              
               <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:20px;">
                 <tr>
                   <td style="background-color:#312e81;border-radius:8px;padding:10px 16px;">
@@ -91,7 +95,7 @@ def build(name: str, email: str, phone: str, message: str,
                       <td>
                         <a href="{url}" style="color:#c7d2fe;font-size:13px;
                                                font-weight:700;text-decoration:none;">
-                          🔗 &nbsp;{lbl}
+                           &nbsp;{lbl}
                         </a>
                       </td>
                     </tr></table>
@@ -102,7 +106,7 @@ def build(name: str, email: str, phone: str, message: str,
           </tr>
         </table>
 
-        <!-- BODY -->
+        
         <table width="100%" cellpadding="0" cellspacing="0">
           <tr>
             <td style="background-color:#ffffff;padding:36px 44px 40px;">
@@ -114,7 +118,7 @@ def build(name: str, email: str, phone: str, message: str,
                      style="border:1px solid #e2e8f0;border-radius:12px;
                             overflow:hidden;margin-bottom:28px;">
 
-                <!-- Name -->
+                
                 <tr>
                   <td width="130" style="padding:14px 16px;background-color:#f8faff;
                                          border-right:1px solid #e2e8f0;
@@ -128,7 +132,7 @@ def build(name: str, email: str, phone: str, message: str,
                   </td>
                 </tr>
 
-                <!-- Email -->
+                
                 <tr>
                   <td style="padding:14px 16px;background-color:#f8faff;
                              border-right:1px solid #e2e8f0;
@@ -144,7 +148,7 @@ def build(name: str, email: str, phone: str, message: str,
                   </td>
                 </tr>
 
-                <!-- Phone -->
+                
                 <tr>
                   <td style="padding:14px 16px;background-color:#f8faff;
                              border-right:1px solid #e2e8f0;
@@ -158,7 +162,7 @@ def build(name: str, email: str, phone: str, message: str,
                   </td>
                 </tr>
 
-                <!-- Website -->
+                
                 <tr>
                   <td style="padding:14px 16px;background-color:#f8faff;
                              border-right:1px solid #e2e8f0;
@@ -175,7 +179,7 @@ def build(name: str, email: str, phone: str, message: str,
                   </td>
                 </tr>
 
-                <!-- Product -->
+                
                 <tr>
                   <td style="padding:14px 16px;background-color:#f8faff;
                              border-right:1px solid #e2e8f0;
@@ -189,7 +193,7 @@ def build(name: str, email: str, phone: str, message: str,
                   </td>
                 </tr>
 
-                <!-- Product Type -->
+                
                 <tr>
                   <td style="padding:14px 16px;background-color:#f8faff;
                              border-right:1px solid #e2e8f0;
@@ -203,7 +207,21 @@ def build(name: str, email: str, phone: str, message: str,
                   </td>
                 </tr>
 
-                <!-- Message -->
+                
+                <tr>
+                  <td style="padding:14px 16px;background-color:#f8faff;
+                             border-right:1px solid #e2e8f0;
+                             border-bottom:1px solid #e2e8f0;vertical-align:middle;">
+                    <span style="color:#94a3b8;font-size:11px;font-weight:700;
+                                 letter-spacing:1px;text-transform:uppercase;">IP Address</span>
+                  </td>
+                  <td style="padding:14px 18px;border-bottom:1px solid #e2e8f0;
+                             vertical-align:middle;background-color:#ffffff;">
+                    <span style="color:#334155;font-size:14px;">{dash(ip_address)}</span>
+                  </td>
+                </tr>
+
+                
                 <tr>
                   <td style="padding:14px 16px;background-color:#f8faff;
                              border-right:1px solid #e2e8f0;vertical-align:top;">
@@ -220,12 +238,12 @@ def build(name: str, email: str, phone: str, message: str,
 
               </table>
 
-              <!-- Divider -->
+              
               <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:28px;">
                 <tr><td style="height:1px;background-color:#e2e8f0;"></td></tr>
               </table>
 
-              <!-- Action buttons -->
+              
               <table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td align="center">
@@ -237,7 +255,7 @@ def build(name: str, email: str, phone: str, message: str,
                                     border-radius:100px;background-color:#4f46e5;
                                     color:#ffffff;text-decoration:none;
                                     font-size:14px;font-weight:700;">
-                            Reply to {name} →
+                            Reply to {name} 
                           </a>
                         </td>
                         <td>
@@ -260,7 +278,7 @@ def build(name: str, email: str, phone: str, message: str,
           </tr>
         </table>
 
-        <!-- Bottom accent bar -->
+        
         <table width="100%" cellpadding="0" cellspacing="0">
           <tr>
             <td style="height:4px;background-color:#ec4899;"></td>
@@ -272,13 +290,13 @@ def build(name: str, email: str, phone: str, message: str,
       </td>
     </tr>
 
-    <!-- FOOTER -->
+    
     <tr>
       <td style="padding:22px 0;text-align:center;">
         <p style="margin:0;color:#94a3b8;font-size:12px;line-height:1.7;">
           Automated notification from
           <a href="{url}" style="color:#64748b;text-decoration:none;">{lbl}</a>
-          &nbsp;·&nbsp; © {year}
+          &nbsp;&nbsp;  {year}
         </p>
       </td>
     </tr>
@@ -288,3 +306,4 @@ def build(name: str, email: str, phone: str, message: str,
 </table>
 </body>
 </html>"""
+

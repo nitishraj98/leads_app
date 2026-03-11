@@ -1,3 +1,5 @@
+"""Flask application factory and error handlers."""
+
 from flask import Flask
 from flask_cors import CORS
 from flask_limiter import Limiter
@@ -11,10 +13,10 @@ from routes.leads import leads_bp
 
 
 def create_app() -> Flask:
+    """Create and configure the Flask application."""
     app = Flask(__name__)
     app.secret_key = SECRET_KEY
 
-    # Extensions
     CORS(app)
     limiter = Limiter(
         get_remote_address,
@@ -22,16 +24,15 @@ def create_app() -> Flask:
         default_limits=[DEFAULT_RATE_LIMIT],
         storage_uri="memory://"
     )
-    # Apply the stricter limit to the submit endpoint
     limiter.limit(SUBMIT_RATE_LIMIT)(submit_bp)
 
-    # Blueprints
     app.register_blueprint(index_bp)
     app.register_blueprint(submit_bp)
     app.register_blueprint(leads_bp)
     
     @app.errorhandler(429)
     def rate_limit_exceeded(e):
+        """Return a JSON response for rate limit errors."""
         return jsonify({
             "success": False,
             "message": f"Rate limit exceeded. Try again later.",
@@ -40,10 +41,12 @@ def create_app() -> Flask:
 
     @app.errorhandler(404)
     def not_found(e):
+        """Return a JSON response for unknown endpoints."""
         return jsonify({"success": False, "message": "Endpoint not found."}), 404
 
     @app.errorhandler(405)
     def method_not_allowed(e):
+        """Return a JSON response for unsupported HTTP methods."""
         return jsonify({"success": False, "message": "Method not allowed."}), 405
 
     return app

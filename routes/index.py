@@ -1,3 +1,5 @@
+"""Minimal HTML contact form route."""
+
 from flask import Blueprint, render_template_string
 
 index_bp = Blueprint("index", __name__)
@@ -33,7 +35,6 @@ FORM_HTML = """<!DOCTYPE html><html><head><title>Contact Form</title>
 <label>Website Key</label>
 <input type="text"  id="website_key"  placeholder="https://yourwebsite.com">
 
-<!-- Honeypot (hidden from real users) -->
 <input type="text" id="company" style="display:none;" tabindex="-1" autocomplete="off">
 
 <button onclick="submitForm()">Submit</button>
@@ -43,7 +44,7 @@ FORM_HTML = """<!DOCTYPE html><html><head><title>Contact Form</title>
 async function submitForm() {
   const btn = document.querySelector('button');
   btn.disabled = true;
-  btn.textContent = 'Sending…';
+  btn.textContent = 'Sending...';
 
   const res = await fetch('/submit', {
     method: 'POST',
@@ -56,7 +57,7 @@ async function submitForm() {
       product_type: document.getElementById('product_type').value,
       message:      document.getElementById('message').value,
       website_key:  document.getElementById('website_key').value,
-      company:      document.getElementById('company').value,   // honeypot
+      company:      document.getElementById('company').value,
     })
   });
 
@@ -79,4 +80,6 @@ async function submitForm() {
 
 @index_bp.route("/")
 def index():
+    """Render the embedded contact form HTML."""
     return render_template_string(FORM_HTML)
+
