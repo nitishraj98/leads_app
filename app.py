@@ -1,6 +1,6 @@
 """Flask application factory and error handlers."""
 
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -17,7 +17,23 @@ def create_app() -> Flask:
     app = Flask(__name__)
     app.secret_key = SECRET_KEY
 
-    CORS(app)
+    CORS(
+        app,
+        resources={
+            r"/submit*": {
+                "origins": [
+                    "https://rirabh.com",
+                    "https://www.rirabh.com",
+                    "https://callerspot.com",
+                    "https://www.callerspot.com",
+                    "http://localhost:3000"
+                ],
+                "methods": ["POST", "OPTIONS"],
+                "allow_headers": ["Content-Type", "Authorization"],
+            }
+        },
+        supports_credentials=True
+    )
     limiter = Limiter(
         get_remote_address,
         app=app,

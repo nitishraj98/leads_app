@@ -4,7 +4,7 @@ from flask import Blueprint, request, jsonify
 
 from db.database import save_lead
 from mailer.sender import send_lead_emails
-from utils.validators import is_valid_email, is_spam
+from utils.validators import is_valid_email, is_spam, is_gibberish, is_invalid_message
 
 submit_bp = Blueprint("submit", __name__)
 
@@ -48,6 +48,12 @@ def submit():
 
     if not is_valid_email(email):
         return jsonify({"success": False, "message": "Invalid email address."}), 422
+
+    if is_gibberish(name):
+        return jsonify({"success": False, "message": "Please enter a valid name."}), 422
+           
+    if is_invalid_message(message):
+        return jsonify({"success": False, "message": "Please enter a valid message."}), 422
 
     if len(message) > 1000:
         return jsonify({"success": False, "message": "Message too long (max 1000 chars)."}), 422
