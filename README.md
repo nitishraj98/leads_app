@@ -158,3 +158,9 @@ curl -H "X-API-Key: your-api-key" \
   ```
 - Store `.env` secrets securely (e.g. via your host's environment variable manager).
 
+WowPhone leads are sent through SMTP using the `WOWPHONE_SMTP_*`,
+`WOWPHONE_SENDER_*`, and `WOWPHONE_ADMIN_EMAILS` settings. If they are omitted,
+the default SMTP settings are used. If the configured WowPhone SMTP connection,
+authentication, or send fails, the app retries once with the default SMTP
+settings. WowPBX continues to use Mailgun.
+

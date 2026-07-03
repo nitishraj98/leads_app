@@ -26,6 +26,7 @@ def create_app() -> Flask:
                     "https://www.rirabh.com",
                     "https://callerspot.com",
                     "https://www.callerspot.com",
+                    "https://wowphone.app",
                     "http://localhost:3000"
                 ],
                 "methods": ["POST", "OPTIONS"],

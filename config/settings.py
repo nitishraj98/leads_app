@@ -45,6 +45,15 @@ def build_email_config(prefix: str, fallback_email=None, fallback_password=None,
     }
 
 
+DEFAULT_EMAIL_CONFIG = {
+    "smtp_host": DEFAULT_SMTP_HOST,
+    "smtp_port": DEFAULT_SMTP_PORT,
+    "sender_email": LEGACY_SENDER_EMAIL,
+    "sender_password": LEGACY_SENDER_PASSWORD,
+    "admin_emails": LEGACY_ADMIN_EMAILS,
+}
+
+
 EMAIL_CONFIGS = {
     "rirabh": build_email_config(
         "RIRABH",
@@ -54,6 +63,12 @@ EMAIL_CONFIGS = {
     ),
     "callerspot": build_email_config(
         "CALLERSPOT",
+        fallback_email=LEGACY_SENDER_EMAIL,
+        fallback_password=LEGACY_SENDER_PASSWORD,
+        fallback_admin_emails=LEGACY_ADMIN_EMAILS,
+    ),
+    "wowphone": build_email_config(
+        "WOWPHONE",
         fallback_email=LEGACY_SENDER_EMAIL,
         fallback_password=LEGACY_SENDER_PASSWORD,
         fallback_admin_emails=LEGACY_ADMIN_EMAILS,
