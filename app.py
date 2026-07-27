@@ -41,7 +41,7 @@ def create_app() -> Flask:
         default_limits=[DEFAULT_RATE_LIMIT],
         storage_uri="memory://"
     )
-    limiter.limit(SUBMIT_RATE_LIMIT)(submit_bp)
+    limiter.limit(SUBMIT_RATE_LIMIT, methods=["POST"])(submit_bp)
 
     app.register_blueprint(index_bp)
     app.register_blueprint(submit_bp)
