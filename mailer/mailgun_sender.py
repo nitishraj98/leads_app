@@ -45,7 +45,7 @@ def _post_message(cfg: dict, payload: dict) -> None:
 
 def send_lead_emails_via_mailgun(to_email: str, name: str, phone: str, message: str,
                                  website_key: str, product: str, product_type: str,
-                                 ip_address: str) -> None:
+                                 ip_address: str, campaign: str = "", source: str = "") -> None:
     """Send confirmation and admin emails through Mailgun."""
     cfg = get_mailgun_config(website_key)
     lbl = label(website_key)
@@ -69,6 +69,7 @@ def send_lead_emails_via_mailgun(to_email: str, name: str, phone: str, message: 
             "html": admin_template.build(
                 name, to_email, phone, message,
                 website_key, product, product_type, ip_address,
+                campaign, source,
             ),
         },
     )

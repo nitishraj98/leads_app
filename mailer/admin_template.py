@@ -6,7 +6,7 @@ from utils.helpers import https, label, dash
 
 def build(name: str, email: str, phone: str, message: str,
           website_key: str, product: str, product_type: str,
-          ip_address: str) -> str:
+          ip_address: str, campaign: str = "", source: str = "") -> str:
     """Render the admin notification HTML email."""
     url  = https(website_key)
     lbl  = label(website_key)
@@ -207,7 +207,7 @@ def build(name: str, email: str, phone: str, message: str,
                   </td>
                 </tr>
 
-                
+
                 <tr>
                   <td style="padding:14px 16px;background-color:#f8faff;
                              border-right:1px solid #e2e8f0;
@@ -218,6 +218,34 @@ def build(name: str, email: str, phone: str, message: str,
                   <td style="padding:14px 18px;border-bottom:1px solid #e2e8f0;
                              vertical-align:middle;background-color:#ffffff;">
                     <span style="color:#334155;font-size:14px;">{dash(ip_address)}</span>
+                  </td>
+                </tr>
+
+
+                <tr>
+                  <td style="padding:14px 16px;background-color:#f8faff;
+                             border-right:1px solid #e2e8f0;
+                             border-bottom:1px solid #e2e8f0;vertical-align:middle;">
+                    <span style="color:#94a3b8;font-size:11px;font-weight:700;
+                                 letter-spacing:1px;text-transform:uppercase;">Campaign</span>
+                  </td>
+                  <td style="padding:14px 18px;border-bottom:1px solid #e2e8f0;
+                             vertical-align:middle;background-color:#ffffff;">
+                    <span style="color:#334155;font-size:14px;">{dash(campaign)}</span>
+                  </td>
+                </tr>
+
+
+                <tr>
+                  <td style="padding:14px 16px;background-color:#f8faff;
+                             border-right:1px solid #e2e8f0;
+                             border-bottom:1px solid #e2e8f0;vertical-align:middle;">
+                    <span style="color:#94a3b8;font-size:11px;font-weight:700;
+                                 letter-spacing:1px;text-transform:uppercase;">Lead Source</span>
+                  </td>
+                  <td style="padding:14px 18px;border-bottom:1px solid #e2e8f0;
+                             vertical-align:middle;background-color:#ffffff;">
+                    <span style="color:#334155;font-size:14px;">{dash(source)}</span>
                   </td>
                 </tr>
 

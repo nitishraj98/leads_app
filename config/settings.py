@@ -89,3 +89,12 @@ MAILGUN_CONFIGS = {
 }
 DEFAULT_RATE_LIMIT = "20 per minute"
 SUBMIT_RATE_LIMIT  = "5 per minute"
+
+ZOHO_DC = os.getenv("ZOHO_DC", "in")
+ZOHO_CONFIG = {
+    "client_id": os.getenv("ZOHO_CLIENT_ID"),
+    "client_secret": os.getenv("ZOHO_CLIENT_SECRET"),
+    "refresh_token": os.getenv("ZOHO_REFRESH_TOKEN"),
+    "accounts_url": os.getenv("ZOHO_ACCOUNTS_URL", f"https://accounts.zoho.{ZOHO_DC}"),
+    "api_domain": os.getenv("ZOHO_API_DOMAIN", f"https://www.zohoapis.{ZOHO_DC}"),
+}

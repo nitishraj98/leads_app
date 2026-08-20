@@ -25,6 +25,8 @@ def init_db():
             product      VARCHAR(255),
             product_type VARCHAR(255),
             ip_address   VARCHAR(45),
+            campaign     VARCHAR(255),
+            source       VARCHAR(255),
             submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
@@ -34,6 +36,8 @@ def init_db():
         ("product",      "VARCHAR(255)"),
         ("product_type", "VARCHAR(255)"),
         ("ip_address",   "VARCHAR(45)"),
+        ("campaign",     "VARCHAR(255)"),
+        ("source",       "VARCHAR(255)"),
     ]:
         cur.execute(f"""
             DO $$ BEGIN
@@ -52,15 +56,18 @@ def init_db():
     print("PostgreSQL table ready.")
 
 
-def save_lead(name, email, phone, message, website_key, product, product_type, ip_address):
+def save_lead(name, email, phone, message, website_key, product, product_type,
+              ip_address, campaign="", source=""):
     """Persist a lead submission."""
     conn = get_connection()
     cur  = conn.cursor()
     cur.execute(
         """INSERT INTO form_submissions
-           (name, email, phone, message, website_key, product, product_type, ip_address)
-           VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
-        (name, email, phone, message, website_key, product, product_type, ip_address),
+           (name, email, phone, message, website_key, product, product_type, ip_address,
+            campaign, source)
+           VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+        (name, email, phone, message, website_key, product, product_type, ip_address,
+         campaign, source),
     )
     conn.commit()
     cur.close()
@@ -75,7 +82,7 @@ def fetch_leads(website_key=None, limit=50, offset=0):
 
     query  = """
         SELECT id, name, email, phone, message,
-               website_key, product, product_type, ip_address, submitted_at
+               website_key, product, product_type, ip_address, campaign, source, submitted_at
         FROM form_submissions
     """
     params = []
@@ -112,7 +119,9 @@ def fetch_leads(website_key=None, limit=50, offset=0):
             "product":      row[6],
             "product_type": row[7],
             "ip_address":   row[8],
-            "submitted_at": row[9].isoformat() if row[9] else None,
+            "campaign":     row[9],
+            "source":       row[10],
+            "submitted_at": row[11].isoformat() if row[11] else None,
         }
         for row in rows
     ]

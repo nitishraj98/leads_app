@@ -4,6 +4,7 @@ from flask import Blueprint, request, jsonify
 
 from db.database import save_lead
 from mailer.sender import send_lead_emails
+from mailer.zoho_crm import create_lead as create_zoho_lead
 from utils.validators import is_valid_email, is_spam, is_gibberish, is_invalid_message
 
 submit_bp = Blueprint("submit", __name__)
@@ -38,6 +39,8 @@ def submit():
     website_key  = data.get("website_key",  "").strip()
     product      = data.get("product",      "").strip()
     product_type = data.get("product_type", "").strip()
+    campaign     = data.get("campaign",     "").strip()
+    source       = data.get("source",       "").strip()
     ip_address   = get_client_ip(request)
 
     if is_spam(data):
@@ -59,8 +62,17 @@ def submit():
         return jsonify({"success": False, "message": "Message too long (max 1000 chars)."}), 422
 
     try:
-        save_lead(name, email, phone, message, website_key, product, product_type, ip_address)
-        send_lead_emails(email, name, phone, message, website_key, product, product_type, ip_address)
+        save_lead(name, email, phone, message, website_key, product, product_type,
+                  ip_address, campaign, source)
+        send_lead_emails(email, name, phone, message, website_key, product, product_type,
+                         ip_address, campaign, source)
+
+        try:
+            create_zoho_lead(name, email, phone, message, website_key, product, product_type,
+                             ip_address, campaign, source)
+        except Exception as zoho_exc:
+            print(f"Zoho lead sync failed: {zoho_exc}")
+
         return jsonify({"success": True,
                         "message": "Submitted! Check your email for confirmation."}), 201
     except Exception as e:

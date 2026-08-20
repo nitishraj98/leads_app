@@ -21,7 +21,7 @@ def get_email_config(website_key: str) -> dict:
     admin_emails = cfg.get("admin_emails") or [cfg["sender_email"]]
     return {**cfg, "admin_emails": admin_emails}
 
-
+  
 def get_default_email_config() -> dict:
     """Return the default SMTP configuration used as the WowPhone fallback."""
     cfg = DEFAULT_EMAIL_CONFIG
@@ -34,13 +34,13 @@ def get_default_email_config() -> dict:
 
 def send_lead_emails(to_email: str, name: str, phone: str, message: str,
                      website_key: str, product: str, product_type: str,
-                     ip_address: str) -> None:
+                     ip_address: str, campaign: str = "", source: str = "") -> None:
     """Send confirmation email to user and notification email to admins."""
     slug = website_slug(website_key)
     if slug == "wowpbx":
         send_lead_emails_via_mailgun(
             to_email, name, phone, message,
-            website_key, product, product_type, ip_address,
+            website_key, product, product_type, ip_address, campaign, source,
         )
         return
 
@@ -59,16 +59,22 @@ def send_lead_emails(to_email: str, name: str, phone: str, message: str,
         admin_msg["To"] = ", ".join(active_cfg["admin_emails"])
         admin_msg.attach(MIMEText(
             admin_template.build(name, to_email, phone, message,
-                                 website_key, product, product_type, ip_address),
+                                 website_key, product, product_type, ip_address,
+                                 campaign, source),
             "html",
         ))
 
         with smtplib.SMTP(active_cfg["smtp_host"], active_cfg["smtp_port"]) as server:
             server.starttls()
             server.login(active_cfg["sender_email"], active_cfg["sender_password"])
-            server.sendmail(active_cfg["sender_email"], to_email, user_msg.as_string())
-            server.sendmail(active_cfg["sender_email"], active_cfg["admin_emails"],
-                            admin_msg.as_string())
+            user_refused = server.sendmail(active_cfg["sender_email"], to_email,
+                                           user_msg.as_string())
+            admin_refused = server.sendmail(active_cfg["sender_email"], active_cfg["admin_emails"],
+                                            admin_msg.as_string())
+            if user_refused:
+                print(f"SMTP refused user recipient: {user_refused}")
+            if admin_refused:
+                print(f"SMTP refused admin recipients: {admin_refused}")
 
     try:
         deliver(cfg)
