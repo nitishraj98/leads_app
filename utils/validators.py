@@ -14,11 +14,6 @@ def is_valid_email(email: str) -> bool:
         return False
 
 
-def is_spam(data: dict) -> bool:
-    """Return True when the honeypot field was filled."""
-    return bool(data.get("company"))
-
-
 def _max_repeated_run(text: str) -> int:
     """Return the longest run of repeated alphabetic characters."""
     run = 1

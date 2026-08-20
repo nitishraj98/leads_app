@@ -5,7 +5,7 @@ from flask import Blueprint, request, jsonify
 from db.database import save_lead
 from mailer.sender import send_lead_emails
 from mailer.zoho_crm import create_lead as create_zoho_lead
-from utils.validators import is_valid_email, is_spam, is_gibberish, is_invalid_message
+from utils.validators import is_valid_email, is_gibberish, is_invalid_message
 
 submit_bp = Blueprint("submit", __name__)
 
@@ -42,9 +42,6 @@ def submit():
     campaign     = data.get("campaign",     "").strip()
     source       = data.get("source",       "").strip()
     ip_address   = get_client_ip(request)
-
-    if is_spam(data):
-        return jsonify({"success": False, "message": "Spam detected."}), 422
 
     if not name or not email:
         return jsonify({"success": False, "message": "Name and email are required."}), 400
