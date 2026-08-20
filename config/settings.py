@@ -73,6 +73,12 @@ EMAIL_CONFIGS = {
         fallback_password=LEGACY_SENDER_PASSWORD,
         fallback_admin_emails=LEGACY_ADMIN_EMAILS,
     ),
+    "oojack": build_email_config(
+        "OOJACK",
+        fallback_email=LEGACY_SENDER_EMAIL,
+        fallback_password=LEGACY_SENDER_PASSWORD,
+        fallback_admin_emails=LEGACY_ADMIN_EMAILS,
+    ),
 }
 MAILGUN_CONFIGS = {
     "wowpbx": {

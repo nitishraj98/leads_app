@@ -39,5 +39,7 @@ def website_slug(value: str) -> str:
         return "wowpbx"
     if host.startswith("wowphone"):
         return "wowphone"
+    if host.startswith("oojack"):
+        return "oojack"
     return "default"
 
