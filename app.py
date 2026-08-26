@@ -14,13 +14,15 @@ from routes.leads import leads_bp
 
 def create_app() -> Flask:
     """Create and configure the Flask application."""
+
     app = Flask(__name__)
     app.secret_key = SECRET_KEY
 
+    # CORS configuration
     CORS(
         app,
         resources={
-            r"/submit*": {
+            r"/submit.*": {
                 "origins": [
                     "https://rirabh.com",
                     "https://www.rirabh.com",
@@ -29,49 +31,71 @@ def create_app() -> Flask:
                     "https://wowphone.app",
                     "https://oojack.com",
                     "https://www.oojack.com",
-                    "http://localhost:3000"
+                    "https://wowpbx.com",
+                    "https://www.wowpbx.com",
+                    "http://localhost:3000",
                 ],
                 "methods": ["POST", "OPTIONS"],
-                "allow_headers": ["Content-Type", "Authorization"],
+                "allow_headers": [
+                    "Content-Type",
+                    "Authorization",
+                ],
             }
         },
-        supports_credentials=True
+        supports_credentials=True,
     )
+
+    # Rate limiter
     limiter = Limiter(
-        get_remote_address,
+        key_func=get_remote_address,
         app=app,
         default_limits=[DEFAULT_RATE_LIMIT],
-        storage_uri="memory://"
+        storage_uri="memory://",
     )
-    limiter.limit(SUBMIT_RATE_LIMIT, methods=["POST"])(submit_bp)
 
+    # Register blueprints
     app.register_blueprint(index_bp)
     app.register_blueprint(submit_bp)
     app.register_blueprint(leads_bp)
-    
+
+    # Error handlers
     @app.errorhandler(429)
     def rate_limit_exceeded(e):
         """Return a JSON response for rate limit errors."""
         return jsonify({
             "success": False,
-            "message": f"Rate limit exceeded. Try again later.",
+            "message": "Rate limit exceeded. Try again later.",
             "retry_after": e.description,
         }), 429
 
     @app.errorhandler(404)
     def not_found(e):
         """Return a JSON response for unknown endpoints."""
-        return jsonify({"success": False, "message": "Endpoint not found."}), 404
+        return jsonify({
+            "success": False,
+            "message": "Endpoint not found.",
+        }), 404
 
     @app.errorhandler(405)
     def method_not_allowed(e):
         """Return a JSON response for unsupported HTTP methods."""
-        return jsonify({"success": False, "message": "Method not allowed."}), 405
+        return jsonify({
+            "success": False,
+            "message": "Method not allowed.",
+        }), 405
 
     return app
 
 
+# IMPORTANT:
+# Gunicorn loads the application using "app:app".
+# Therefore the Flask application must exist at module level.
+app = create_app()
+
+
 if __name__ == "__main__":
     init_db()
-    app = create_app()
-    app.run(debug=True, port=5000)
+    app.run(
+        debug=True,
+        port=5000,
+    )

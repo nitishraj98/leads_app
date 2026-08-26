@@ -5,7 +5,6 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 from config.settings import DEFAULT_EMAIL_CONFIG, EMAIL_CONFIGS
-from mailer.mailgun_sender import send_lead_emails_via_mailgun
 from utils.helpers import label, website_slug
 from mailer import user_template, admin_template
 
@@ -37,13 +36,6 @@ def send_lead_emails(to_email: str, name: str, phone: str, message: str,
                      ip_address: str, campaign: str = "", source: str = "") -> None:
     """Send confirmation email to user and notification email to admins."""
     slug = website_slug(website_key)
-    if slug == "wowpbx":
-        send_lead_emails_via_mailgun(
-            to_email, name, phone, message,
-            website_key, product, product_type, ip_address, campaign, source,
-        )
-        return
-
     cfg = get_email_config(website_key)
     lbl = label(website_key)
     def deliver(active_cfg: dict) -> None:
